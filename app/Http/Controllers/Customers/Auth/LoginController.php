@@ -37,7 +37,7 @@ class LoginController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest')->except('logout');
+        $this->middleware('guest:customer')->except('logout');
     }
 
     protected function sendLoginResponse(Request $request)
@@ -55,14 +55,14 @@ class LoginController extends Controller
     {
         return response()->json([
             'message' => 'Login successful!',
-            'token' => $user->createToken(config('app.name'))->accessToken,
-            'user' => $user->toArray()
+            'customer_token' => $user->createToken(config('app.name'))->accessToken,
+            'customer' => $user->toArray()
         ]);
     }
 
     public function logout(Request $request)
     {
-        $user = $this->guard()->user();
+        $user = $this->guard('customer')->user();
 
         $user->token()->revoke();
 
@@ -78,5 +78,10 @@ class LoginController extends Controller
         return response()->json([
             'message' => 'Authenticated.'
         ]);
+    }
+
+    protected function guard()
+    {
+        return Auth::guard('customer');
     }
 }

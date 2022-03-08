@@ -7,7 +7,7 @@ export default [
         meta: {
             title: 'Login'
         },
-        component: () => import('../components/auth/Login.vue'),
+        component: () => import('../components/users/auth/Login.vue'),
         beforeEnter: guards.authenticate
     },
     {
@@ -16,7 +16,7 @@ export default [
         meta: {
             title: 'Dashboard',
         },
-        component: () => import('../components/Dashboard.vue'),
+        component: () => import('../components/users/Dashboard.vue'),
         beforeEnter: guards.accessApp
     },
     {
@@ -25,7 +25,7 @@ export default [
         meta: {
             title: 'Customers',
         },
-        component: () => import('../components/customers/Customers.vue'),
+        component: () => import('../components/users/customers/Customers.vue'),
         beforeEnter: guards.accessApp
     },
     {
@@ -34,7 +34,7 @@ export default [
         meta: {
             title: 'Bills',
         },
-        component: () => import('../components/bills/Bills.vue'),
+        component: () => import('../components/users/customers/bills/Bills.vue'),
         beforeEnter: guards.accessApp
     },
 ]

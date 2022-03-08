@@ -8,7 +8,7 @@ require('./bootstrap');
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue';
 
 import Datatable from './utils/Datatable/Datatable.vue';
-import Dashboard from './layouts/Dashboard';
+import UserDashboard from './layouts/UserDashboard';
 import PageTitle from './components/PageTitle'
 
 // Import Bootstrap an BootstrapVue CSS files (order is important)
@@ -31,6 +31,9 @@ require('./store/subscriber');
 store.dispatch('login/check')
     .catch(data => console.error(data.message))
 
+store.dispatch('customerLogin/check')
+    .catch(data => console.error(data.message))
+
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -38,9 +41,9 @@ store.dispatch('login/check')
  *
  * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
  */
- Vue.component('datatable', Datatable);
- Vue.component('dashboard', Dashboard);
- Vue.component('page-title', PageTitle);
+Vue.component('datatable', Datatable);
+Vue.component('user-dashboard', UserDashboard);
+Vue.component('page-title', PageTitle);
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
@@ -53,11 +56,11 @@ router.beforeEach((to, from, next) => {
     let title = 'Kinetik Dynamics'
 
     if (to.meta.title)
-      title += ' - ' + to.meta.title
+        title += ' - ' + to.meta.title
 
     document.title = title
     next()
-  })
+})
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

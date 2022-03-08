@@ -28,6 +28,6 @@ class SendBillNotification
      */
     public function handle(BillGenerated $event)
     {
-        Mail::send(new BillGeneratedMail($event->customer, $event->bill));
+        Mail::to($event->customer->email)->send(new BillGeneratedMail($event->customer, $event->bill));
     }
 }
