@@ -59,4 +59,24 @@ class LoginController extends Controller
             'user' => $user->toArray()
         ]);
     }
+
+    public function logout(Request $request)
+    {
+        $user = $this->guard()->user();
+
+        $user->token()->revoke();
+
+        if ($response = $this->loggedOut($request)) {
+            return $response;
+        }
+
+        return new Response('', 204);
+    }
+
+    public function check()
+    {
+        return response()->json([
+            'message' => 'Authenticated.'
+        ]);
+    }
 }
