@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Customer;
 use Illuminate\Http\Request;
+use App\Repositories\Interfaces\CustomerRepositoryInterface;
+use App\Http\Resources\CustomerResource;
+use App\Http\Requests\StoreCustomerRequest;
+use App\Http\Requests\UpdateCustomerRequest;
 
 class CustomerController extends Controller
 {
@@ -12,19 +16,9 @@ class CustomerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(CustomerRepositoryInterface $customerRepository)
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return CustomerResource::collection($customerRepository->datatable());
     }
 
     /**
@@ -33,9 +27,12 @@ class CustomerController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreCustomerRequest $request, CustomerRepositoryInterface $customerRepository)
     {
-        //
+        return response()->json([
+            'message' => 'Customer created successfully!',
+            'data' => new CustomerResource($customerRepository->create($request->validated()))
+         ]);
     }
 
     /**
@@ -46,18 +43,7 @@ class CustomerController extends Controller
      */
     public function show(Customer $customer)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Customer  $customer
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Customer $customer)
-    {
-        //
+        return new CustomerResource($customer);
     }
 
     /**
@@ -67,9 +53,14 @@ class CustomerController extends Controller
      * @param  \App\Models\Customer  $customer
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Customer $customer)
+    public function update(UpdateCustomerRequest $request, Customer $customer, CustomerRepositoryInterface $customerRepository)
     {
-        //
+        $customerRepository->update($customer, $request->validated());
+
+        return response()->json([
+           'message' => 'Customer updated successfully!',
+           'data' => new CustomerResource($customer)
+        ]);
     }
 
     /**
@@ -78,8 +69,12 @@ class CustomerController extends Controller
      * @param  \App\Models\Customer  $customer
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Customer $customer)
+    public function destroy(Customer $customer, CustomerRepositoryInterface $customerRepository)
     {
-        //
+        $customerRepository->delete($customer);
+
+        return response()->json([
+           'message' => 'Customer deleted successfully!'
+        ]);
     }
 }

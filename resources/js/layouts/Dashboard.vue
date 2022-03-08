@@ -9,11 +9,7 @@
     >
       <div class="px-3 py-2">
         <nav class="mb-3">
-          <b-nav vertical>
-            <b-nav-item to="/dashboard">Dashboard</b-nav-item>
-            <b-nav-item href="#link-1" @click="hide">Link</b-nav-item>
-            <b-nav-item href="#link-2" @click="hide">Another Link</b-nav-item>
-          </b-nav>
+          <side-nav />
         </nav>
       </div>
     </b-sidebar>
@@ -52,10 +48,20 @@
   </div>
 </template>
 
+<style>
+.b-sidebar-header .close {
+    display: none;
+}
+</style>
+
 <script>
 import { mapGetters, mapActions } from "vuex";
+import SideNav from "../components/SideNav.vue";
 
 export default {
+  components: {
+    SideNav,
+  },
   data() {
     return {
       show: true,

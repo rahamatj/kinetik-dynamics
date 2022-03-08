@@ -19,4 +19,13 @@ export default [
         component: () => import('../components/Dashboard.vue'),
         beforeEnter: guards.accessApp
     },
+    {
+        path: '/customers',
+        name: 'customers',
+        meta: {
+            title: 'Customers',
+        },
+        component: () => import('../components/customers/Customers.vue'),
+        beforeEnter: guards.accessApp
+    },
 ]
