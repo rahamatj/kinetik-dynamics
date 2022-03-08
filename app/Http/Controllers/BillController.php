@@ -4,6 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Bill;
 use Illuminate\Http\Request;
+use App\Models\Customer;
+use App\Http\Resources\BillResource;
+use App\Events\BillGenerated;
+use App\Http\Requests\StoreBillRequest;
+use App\Http\Requests\UpdateBillRequest;
+use App\Repositories\Interfaces\BillRepositoryInterface;
 
 class BillController extends Controller
 {
@@ -12,19 +18,9 @@ class BillController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Customer $customer, BillRepositoryInterface $billRepository)
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return BillResource::collection($billRepository->datatable($customer));
     }
 
     /**
@@ -33,9 +29,16 @@ class BillController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreBillRequest $request, Customer $customer, BillRepositoryInterface $billRepository)
     {
-        //
+        $bill = $billRepository->create($customer, $request->validated());
+
+        BillGenerated::dispatch($customer, $bill);
+
+        return response()->json([
+            'message' => 'Bill created successfully!',
+            'data' => new BillResource($bill)
+         ]);
     }
 
     /**
@@ -44,20 +47,9 @@ class BillController extends Controller
      * @param  \App\Models\Bill  $bill
      * @return \Illuminate\Http\Response
      */
-    public function show(Bill $bill)
+    public function show(Customer $customer, Bill $bill)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Bill  $bill
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Bill $bill)
-    {
-        //
+        return new BillResource($bill);
     }
 
     /**
@@ -67,9 +59,14 @@ class BillController extends Controller
      * @param  \App\Models\Bill  $bill
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Bill $bill)
+    public function update(UpdateBillRequest $request, Customer $customer, Bill $bill, BillRepositoryInterface $billRepository)
     {
-        //
+        $billRepository->update($bill, $request->validated());
+
+        return response()->json([
+           'message' => 'Bill status changed successfully!',
+           'data' => new BillResource($bill)
+        ]);
     }
 
     /**

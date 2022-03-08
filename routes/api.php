@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\BillController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,5 +27,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::get('/auth/check', [LoginController::class, 'check']);
     Route::post('/logout', [LoginController::class, 'logout']);
 
-    Route::resource('/customers', CustomerController::class)->except(['create', 'edit']);
+    Route::resource('/customers/{customer}/bills', BillController::class)->except(['create', 'edit']);
+    Route::resource('/customers', CustomerController::class)->except(['create', 'edit', 'update', 'destroy']);
+
 });

@@ -15,6 +15,24 @@ class CreateBillsTable extends Migration
     {
         Schema::create('bills', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('customer_id');
+            $table->enum('month', [
+                'January',
+                'February',
+                'March',
+                'April',
+                'May',
+                'June',
+                'July',
+                'August',
+                'September',
+                'October',
+                'November',
+                'December'
+            ]);
+            $table->smallInteger('year');
+            $table->unsignedDouble('amount', 15, 4);
+            $table->enum('status', ['Due', 'Paid']);
             $table->timestamps();
         });
     }

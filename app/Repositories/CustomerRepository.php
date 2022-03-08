@@ -17,7 +17,8 @@ class CustomerRepository implements CustomerRepositoryInterface
         $datatable->filterBy([
             'name',
             'email',
-            'address'
+            'address',
+            'created_at'
         ]);
 
         return $datatable->get();

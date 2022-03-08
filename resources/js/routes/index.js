@@ -28,4 +28,13 @@ export default [
         component: () => import('../components/customers/Customers.vue'),
         beforeEnter: guards.accessApp
     },
+    {
+        path: '/customers/:customerId/bills',
+        name: 'bills',
+        meta: {
+            title: 'Bills',
+        },
+        component: () => import('../components/bills/Bills.vue'),
+        beforeEnter: guards.accessApp
+    },
 ]

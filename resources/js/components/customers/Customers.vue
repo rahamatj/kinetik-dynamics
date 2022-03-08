@@ -29,6 +29,14 @@
               Edit
             </b-button>
             <b-button
+              variant="warning"
+              size="sm"
+              class="mr-2 mb-2"
+              @click="bills(row.item.id)"
+            >
+              Bills
+            </b-button>
+            <b-button
               variant="danger"
               size="sm"
               class="mr-2 mb-2"
@@ -195,6 +203,9 @@ export default {
           this.isUpdating = false;
           console.error(data.message);
         });
+    },
+    bills(id) {
+        this.$router.replace({ name: 'bills', params: { customerId: id } });
     },
     destroy(id) {
       this.$bvModal

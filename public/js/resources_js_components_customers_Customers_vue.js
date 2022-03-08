@@ -236,6 +236,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -314,6 +322,14 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (data) {
         _this2.isUpdating = false;
         console.error(data.message);
+      });
+    },
+    bills: function bills(id) {
+      this.$router.replace({
+        name: 'bills',
+        params: {
+          customerId: id
+        }
       });
     },
     destroy: function destroy(id) {
@@ -1122,6 +1138,20 @@ var render = function () {
                           },
                         },
                         [_vm._v("\n            Edit\n          ")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "b-button",
+                        {
+                          staticClass: "mr-2 mb-2",
+                          attrs: { variant: "warning", size: "sm" },
+                          on: {
+                            click: function ($event) {
+                              return _vm.bills(row.item.id)
+                            },
+                          },
+                        },
+                        [_vm._v("\n            Bills\n          ")]
                       ),
                       _vm._v(" "),
                       _c(
