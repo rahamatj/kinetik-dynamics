@@ -5,8 +5,28 @@
  */
 
 require('./bootstrap');
+import { BootstrapVue, IconsPlugin } from 'bootstrap-vue';
+
+import Datatable from './utils/Datatable/Datatable.vue';
+
+// Import Bootstrap an BootstrapVue CSS files (order is important)
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 window.Vue = require('vue').default;
+
+// router
+import router from './routes.js';
+window.router = router;
+
+// store
+import store from './store';
+window.store = store;
+
+require('./store/subscriber');
+
+store.dispatch('login/check')
+    .catch(data => console.error(data.message))
 
 /**
  * The following block of code may be used to automatically register your
@@ -15,11 +35,24 @@ window.Vue = require('vue').default;
  *
  * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
  */
-
+ Vue.component('datatable', Datatable);
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+// Make BootstrapVue available throughout your project
+Vue.use(BootstrapVue)
+// Optionally install the BootstrapVue icon components plugin
+Vue.use(IconsPlugin)
+
+router.beforeEach((to, from, next) => {
+    let title = 'Kinetik Dynamics'
+
+    if (to.meta.title)
+      title += ' - ' + to.meta.title
+
+    document.title = title
+    next()
+  })
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -29,4 +62,6 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 
 const app = new Vue({
     el: '#app',
+    router,
+    store
 });
