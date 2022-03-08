@@ -37,4 +37,13 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
     }
+
+    protected function authenticated(Request $request, $user)
+    {
+        return response()->json([
+            'message' => 'Login successful!',
+            'token' => $user->createToken(config('app.name'))->accessToken,
+            'user' => $user->toArray()
+        ]);
+    }
 }
