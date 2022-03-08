@@ -7,4 +7,10 @@ export default {
 
     return next()
   },
+  accessApp: (to, from, next) => {
+    if (! store.getters['login/isAuthenticated'])
+      return next({ name: 'login' })
+
+    return next()
+  },
 }

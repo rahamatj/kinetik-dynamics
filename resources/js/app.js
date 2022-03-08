@@ -8,6 +8,7 @@ require('./bootstrap');
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue';
 
 import Datatable from './utils/Datatable/Datatable.vue';
+import Dashboard from './layouts/Dashboard';
 
 // Import Bootstrap an BootstrapVue CSS files (order is important)
 import 'bootstrap/dist/css/bootstrap.css'
@@ -21,6 +22,7 @@ window.router = router;
 
 // store
 import store from './store';
+import Vue from 'vue';
 window.store = store;
 
 require('./store/subscriber');
@@ -36,6 +38,7 @@ store.dispatch('login/check')
  * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
  */
  Vue.component('datatable', Datatable);
+ Vue.component('dashboard', Dashboard);
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
