@@ -77,6 +77,9 @@
                 </b-button>
               </div>
             </b-form>
+            <div class="mt-2">
+                <router-link to="/customers/login">Log in as customer</router-link>
+            </div>
           </b-card>
         </div>
       </div>
@@ -104,7 +107,7 @@ export default {
     login() {
       this.authenticate(this.form)
         .then((data) => {
-          let routeName = "dashboard";
+          let routeName = "users.dashboard";
 
           this.$router.replace({ name: routeName });
         })

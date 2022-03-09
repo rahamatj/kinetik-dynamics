@@ -34,6 +34,7 @@ export default {
                     .then(data => {
                         commit('SET_TOKEN', data.token)
                         commit('SET_USER', data.user)
+                        localStorage.setItem('logged_in_as', 'user')
 
                         resolve(data)
                     })
@@ -49,6 +50,7 @@ export default {
                         commit('SET_TOKEN', null)
                         commit('SET_USER', null)
                         commit('SET_IS_LOGGING_OUT', false)
+                        localStorage.removeItem('logged_in_as')
 
                         resolve()
                     })
@@ -61,17 +63,19 @@ export default {
         },
         check({ commit }) {
             return new Promise((resolve, reject) => {
-                commit('SET_TOKEN', localStorage.getItem('token'))
-                commit('SET_USER', JSON.parse(localStorage.getItem('user')))
+                if (localStorage.getItem('logged_in_as') == 'user') {
+                    commit('SET_TOKEN', localStorage.getItem('token'))
+                    commit('SET_USER', JSON.parse(localStorage.getItem('user')))
 
-                axios.get('/api/auth/check')
-                    .then(response => resolve(response.data))
-                    .catch(error => {
-                        commit('SET_TOKEN', null)
-                        commit('SET_USER', null)
+                    axios.get('/api/auth/check')
+                        .then(response => resolve(response.data))
+                        .catch(error => {
+                            commit('SET_TOKEN', null)
+                            commit('SET_USER', null)
 
-                        reject(error.response.data)
-                    })
+                            reject(error.response.data)
+                        })
+                }
             })
         }
     }

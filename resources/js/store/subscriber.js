@@ -2,6 +2,12 @@ import store from './index'
 
 store.subscribe(mutation => {
     switch (mutation.type) {
+        case 'auth/SET_LOGGED_IN_AS':
+            if (mutation.payload) {
+                localStorage.setItem('logged_in_as', mutation.payload)
+            }
+            break
+
         case 'login/SET_TOKEN':
             if (mutation.payload) {
                 axios.defaults.headers.common['Authorization'] = 'Bearer ' + mutation.payload
@@ -19,7 +25,7 @@ store.subscribe(mutation => {
                 localStorage.removeItem('user')
             }
             break
-        case 'customerLogin/SET_TOKEN':
+        case 'customerLogin/SET_CUSTOMER_TOKEN':
             if (mutation.payload) {
                 axios.defaults.headers.common['Authorization'] = 'Bearer ' + mutation.payload
                 localStorage.setItem('customer_token', mutation.payload)
@@ -29,7 +35,7 @@ store.subscribe(mutation => {
             }
             break
 
-        case 'customerLogin/SET_USER':
+        case 'customerLogin/SET_CUSTOMER':
             if (mutation.payload) {
                 localStorage.setItem('customer', JSON.stringify(mutation.payload))
             } else {

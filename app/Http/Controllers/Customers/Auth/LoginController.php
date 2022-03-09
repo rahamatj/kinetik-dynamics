@@ -7,6 +7,9 @@ use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use App\Models\Customer;
 
 class LoginController extends Controller
 {
@@ -37,7 +40,7 @@ class LoginController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest:customer')->except('logout');
+        $this->middleware('guest')->except('logout');
     }
 
     protected function sendLoginResponse(Request $request)
@@ -51,6 +54,50 @@ class LoginController extends Controller
         return new Response('', 204);
     }
 
+    public function login(Request $request)
+    {
+        $this->validateLogin($request);
+
+        // If the class is using the ThrottlesLogins trait, we can automatically throttle
+        // the login attempts for this application. We'll key this by the username and
+        // the IP address of the client making these requests into this application.
+        if (method_exists($this, 'hasTooManyLoginAttempts') &&
+            $this->hasTooManyLoginAttempts($request)) {
+            $this->fireLockoutEvent($request);
+
+            return $this->sendLockoutResponse($request);
+        }
+
+        if ($this->attemptLogin($request)) {
+            return $this->sendLoginResponse($request);
+        }
+
+        // If the login attempt was unsuccessful we will increment the number of attempts
+        // to login and redirect the user back to the login form. Of course, when this
+        // user surpasses their maximum number of attempts they will get locked out.
+        $this->incrementLoginAttempts($request);
+
+        return $this->sendFailedLoginResponse($request);
+    }
+
+    protected function attempt($credentials)
+    {
+        $user = Customer::where($this->username(), $credentials['email'])->first();
+        if (!Hash::check($credentials['password'], $user->password)) {
+            return false;
+        }
+        $response = Auth::login($user);
+
+        return true;
+    }
+
+    protected function attemptLogin(Request $request)
+    {
+        return $this->attempt(
+            $this->credentials($request)
+        );
+    }
+
     protected function authenticated(Request $request, $user)
     {
         return response()->json([
@@ -62,7 +109,7 @@ class LoginController extends Controller
 
     public function logout(Request $request)
     {
-        $user = $this->guard('customer')->user();
+        $user = $this->guard()->user();
 
         $user->token()->revoke();
 
@@ -75,13 +122,10 @@ class LoginController extends Controller
 
     public function check()
     {
+        dd(config('auth.guards.api.provider'));
+
         return response()->json([
             'message' => 'Authenticated.'
         ]);
-    }
-
-    protected function guard()
-    {
-        return Auth::guard('customer');
     }
 }

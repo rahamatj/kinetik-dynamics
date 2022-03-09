@@ -1,15 +1,27 @@
 import store from '../store'
 
 export default {
-  authenticate: (to, from, next) => {
+  userAuthenticate: (to, from, next) => {
     if (store.getters['login/isAuthenticated'])
-      return next({ name: 'dashboard' })
+      return next({ name: 'users.dashboard' })
 
     return next()
   },
-  accessApp: (to, from, next) => {
+  customerAuthenticate: (to, from, next) => {
+    if (store.getters['customerLogin/isAuthenticated'])
+      return next({ name: 'customers.dashboard' })
+
+    return next()
+  },
+  accessUserDashboard: (to, from, next) => {
     if (! store.getters['login/isAuthenticated'])
-      return next({ name: 'login' })
+      return next({ name: 'users.login' })
+
+    return next()
+  },
+  accessCustomerDashboard: (to, from, next) => {
+    if (! store.getters['customerLogin/isAuthenticated'])
+      return next({ name: 'customers.login' })
 
     return next()
   },

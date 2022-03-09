@@ -9,6 +9,8 @@ interface BillRepositoryInterface
 {
     public function datatable(Customer $customer);
 
+    public function monthlyBill(Customer $customer);
+
     public function create(Customer $customer, $data);
 
     public function update(Bill $bill, $data);

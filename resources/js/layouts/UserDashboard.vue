@@ -75,7 +75,6 @@ export default {
   methods: {
     ...mapActions("login", ["unauthenticate"]),
     toggleSidebar() {
-      console.log("hello");
       this.show = !this.show;
       this.offset = this.show ? 2 : 0;
       this.cols = this.show ? 10 : 12;
@@ -83,7 +82,7 @@ export default {
     logout() {
       this.unauthenticate()
         .then(() => {
-          this.$router.replace({ name: "login" });
+          this.$router.replace({ name: "users.login" });
         })
         .catch((error) => {
           console.error(error.response.data.message);

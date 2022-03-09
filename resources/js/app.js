@@ -9,6 +9,7 @@ import { BootstrapVue, IconsPlugin } from 'bootstrap-vue';
 
 import Datatable from './utils/Datatable/Datatable.vue';
 import UserDashboard from './layouts/UserDashboard';
+import CustomerDashboard from './layouts/CustomerDashboard';
 import PageTitle from './components/PageTitle'
 
 // Import Bootstrap an BootstrapVue CSS files (order is important)
@@ -43,6 +44,7 @@ store.dispatch('customerLogin/check')
  */
 Vue.component('datatable', Datatable);
 Vue.component('user-dashboard', UserDashboard);
+Vue.component('customer-dashboard', CustomerDashboard);
 Vue.component('page-title', PageTitle);
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))

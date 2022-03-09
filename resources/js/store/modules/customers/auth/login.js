@@ -30,10 +30,11 @@ export default {
     actions: {
         authenticate({ commit }, form) {
             return new Promise((resolve, reject) => {
-                form.post('/api/customers/login')
+                form.post('/api/customer/login')
                     .then(data => {
                         commit('SET_CUSTOMER_TOKEN', data.customer_token)
                         commit('SET_CUSTOMER', data.customer)
+                        localStorage.setItem('logged_in_as', 'customer')
 
                         resolve(data)
                     })
@@ -44,11 +45,12 @@ export default {
             return new Promise((resolve, reject) => {
                 commit('SET_IS_LOGGING_OUT', true)
 
-                axios.post('/api/customers/logout')
+                axios.post('/api/customer/logout')
                     .then(() => {
                         commit('SET_CUSTOMER_TOKEN', null)
                         commit('SET_CUSTOMER', null)
                         commit('SET_IS_LOGGING_OUT', false)
+                        localStorage.removeItem('logged_in_as')
 
                         resolve()
                     })
@@ -61,17 +63,19 @@ export default {
         },
         check({ commit }) {
             return new Promise((resolve, reject) => {
-                commit('SET_CUSTOMER_TOKEN', localStorage.getItem('customer_token'))
-                commit('SET_CUSTOMER', JSON.parse(localStorage.getItem('customer')))
+                if (localStorage.getItem('logged_in_as') == 'customer') {
+                    commit('SET_CUSTOMER_TOKEN', localStorage.getItem('customer_token'))
+                    commit('SET_CUSTOMER', JSON.parse(localStorage.getItem('customer')))
 
-                axios.get('/api/customers/auth/check')
-                    .then(response => resolve(response.data))
-                    .catch(error => {
-                        commit('SET_CUSTOMER_TOKEN', null)
-                        commit('SET_CUSTOMER', null)
+                    axios.get('/api/customer/auth/check')
+                        .then(response => resolve(response.data))
+                        .catch(error => {
+                            commit('SET_CUSTOMER_TOKEN', null)
+                            commit('SET_CUSTOMER', null)
 
-                        reject(error.response.data)
-                    })
+                            reject(error.response.data)
+                        })
+                }
             })
         }
     }

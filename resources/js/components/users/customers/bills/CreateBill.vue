@@ -68,7 +68,6 @@
 export default {
   props: {
     customerId: {
-      type: String,
       required: true,
     },
   },

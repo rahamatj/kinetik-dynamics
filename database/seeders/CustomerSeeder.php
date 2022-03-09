@@ -14,6 +14,10 @@ class CustomerSeeder extends Seeder
      */
     public function run()
     {
-        Customer::factory()->count(20)->create();
+        Customer::factory()->create([
+            'email' => 'customer@email.com'
+        ]);
+
+        Customer::factory()->count(19)->create();
     }
 }

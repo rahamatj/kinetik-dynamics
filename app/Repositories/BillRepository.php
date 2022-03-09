@@ -25,6 +25,20 @@ class BillRepository implements BillRepositoryInterface
         return $datatable->get();
     }
 
+    public function monthlyBill(Customer $customer)
+    {
+        $query = Bill::selectRaw('SUM(amount) as total_amount, month, year')->where('customer_id', $customer->id)->groupBy(['year', 'month']);
+
+        $datatable = new Datatable($query);
+        $datatable->filterBy([
+            'year',
+            'month',
+            'total_amount'
+        ]);
+
+        return $datatable->get();
+    }
+
     public function create(Customer $customer, $data)
     {
         $data['customer_id'] = $customer->id;

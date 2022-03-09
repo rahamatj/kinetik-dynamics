@@ -104,6 +104,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
@@ -120,7 +123,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var _this = this;
 
       this.authenticate(this.form).then(function (data) {
-        var routeName = "dashboard";
+        var routeName = "users.dashboard";
 
         _this.$router.replace({
           name: routeName
@@ -381,6 +384,17 @@ var render = function () {
                       ],
                       1
                     ),
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "mt-2" },
+                  [
+                    _c("router-link", { attrs: { to: "/customers/login" } }, [
+                      _vm._v("Log in as customer"),
+                    ]),
                   ],
                   1
                 ),

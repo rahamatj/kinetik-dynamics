@@ -35,11 +35,9 @@
 export default {
   props: {
     id: {
-      type: Number,
       required: true,
     },
     customerId: {
-      type: String,
       required: true,
     },
   },
